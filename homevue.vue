@@ -35,8 +35,6 @@
 						:icon="add"
 					></ion-icon>
 				</button>
-				<create-lottery-modal @refreshLotteries="getLotteries">
-				</create-lottery-modal>
 			</div>
 		</div>
 	</base-layout>
@@ -46,7 +44,6 @@
 // import { OverlayEventDetail } from '@ionic/core/components';
 import { add, close, checkmark } from 'ionicons/icons';
 import { axios } from '@/common/api.service.js';
-import CreateLotteryModal from '../components/CreateLotteryModal.vue';
 import LotteriesList from '../components/LotteriesList.vue';
 
 import {
@@ -58,7 +55,6 @@ export default {
 	components: {
 		// IonButton,
 		IonIcon,
-		CreateLotteryModal,
 		LotteriesList,
 	},
 	data() {

@@ -1,5 +1,5 @@
 <template>
-		<ion-modal ref="modal" trigger="open-modal">
+		<ion-modal ref="modal" trigger="open-modal-part">
 			<ion-header>
 				<ion-toolbar>
 					<ion-buttons slot="start">
@@ -22,13 +22,44 @@
 				</ion-toolbar>
 			</ion-header>
 			<ion-content class="ion-padding">
-				<ion-item class="backGRLott">
-					<ion-label color="light" position="stacked">Enter your lottery name</ion-label>
+				<ion-item class="backGR">
+					<ion-label color="light" position="stacked">Enter your name</ion-label>
 					<ion-input
 						color="light"
-						ref="input"
+						required = "true"
+						ref="name"
 						type="text"
-						placeholder="Lottery name"
+						placeholder="name"
+					></ion-input>
+				</ion-item>
+                <ion-item class="backGR">
+					<ion-label color="light" position="stacked">Enter your surname</ion-label>
+					<ion-input
+						color="light"
+						required = "true"
+						ref="surname"
+						type="text"
+						placeholder="surname"
+					></ion-input>
+				</ion-item>
+                <ion-item class="backGR">
+					<ion-label color="light" position="stacked">Enter your e-mail</ion-label>
+					<ion-input
+						color="light"
+						required = "true"
+						ref="email"
+						type="email"
+						placeholder="email"
+					></ion-input>
+				</ion-item>
+                <ion-item class="backGR">
+					<ion-label color="light" position="stacked">Enter your relation</ion-label>
+					<ion-input
+						color="light"
+						required = "true"
+						ref="relation"
+						type="number"
+						placeholder="0"
 					></ion-input>
 				</ion-item>
 			</ion-content>
@@ -54,6 +85,7 @@ import { arrowBack, add } from 'ionicons/icons'
 import { defineComponent } from 'vue';
 
 export default defineComponent({
+	props: ['uuid'],
 	components: {
 		IonButtons,
 		IonButton,
@@ -80,21 +112,30 @@ export default defineComponent({
 			this.$refs.modal.$el.dismiss(null, 'cancel');
 		},
 		async confirm() {
-			const name = this.$refs.input.$el.value;
-			const endpoint = `/api/v1/lotteries/`
+			const name = this.$refs.name.$el.value;
+			const surname = this.$refs.surname.$el.value;
+			const email = this.$refs.email.$el.value;
+			const relation = this.$refs.relation.$el.value;
+
+			const endpoint = `/api/v1/lotteries/${this.uuid}/participant/`
 			let method ="POST"
 			try {
 				await axios({
 					method: method,
 					url: endpoint,
-					data: { name: name}
+					data: { name: name,
+							surname: surname,
+							email: email,
+							relation: relation
+					}
 				})
 			} catch (error) {
 				console.log(error)
 			}
-			this.$emit('refreshLotteries')
+			this.$emit('refreshParticipants')
 			this.$refs.modal.$el.dismiss(null, 'cancel');
 		},
+
 	},
 });
 </script>
@@ -104,7 +145,7 @@ ion-toolbar, ion-header {
     --min-height: 48px;
    }
 
-.backGRLott {
+.backGR {
 	background: rgba(0, 0, 0, 0.8);
 }
 

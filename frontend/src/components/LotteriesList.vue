@@ -1,9 +1,11 @@
 <template>
-	<ion-list>
+	<ion-list class="bgTrans">
 		<lottery-list-item
 			v-for="lottery in lotteries"
 			:key="lottery.uuid"
 			:lottery="lottery"
+			@deleteLottery = "deleteLottery"
+			@editLottery = 'editLottery'
 		/>
 	</ion-list>
 </template>
@@ -17,8 +19,17 @@ export default {
 		IonList,
 		LotteryListItem,
 	},
+	methods: {
+		deleteLottery(lotteryData){
+			this.$emit('deleteLottery', lotteryData)
+		},
+		editLottery(lotteryData){
+			this.$emit('editLottery', lotteryData)
+		}
+	},
 	data() {
 		return {};
 	},
 };
 </script>
+

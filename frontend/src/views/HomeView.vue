@@ -4,7 +4,7 @@
 			:lotteries="lotteries"
 			:totalLotteries="totalLotteries"
 			@deleteLottery="deleteLottery"
-			@changeLotteryName="changeLotteryName"
+			@editLottery="editLottery"
 		/>
 		<div class="lotteriesLoader">
 			<div v-if="loadingLotteries" id="wifi-loader">
@@ -30,11 +30,12 @@
 					<ion-icon
 						size="large"
 						slot="icon-only"
-						color="light"
 						:icon="add"
+						color="light"
 					></ion-icon>
 				</button>
-				<create-lottery-modal @refreshLotteries="getLotteries">
+				<create-lottery-modal 
+					@refreshLotteries="getLotteries">
 				</create-lottery-modal>
 			</div>
 		</div>
@@ -103,7 +104,7 @@ export default {
 				console.log(error);
 			}
 		},
-		async changeLotteryName(lotteryData) {
+		async editLottery(lotteryData) {
 			console.log('lotteryData', lotteryData);
 			const endpoint = `/api/v1/lotteries/${lotteryData.lottery.uuid}/`;
 			const method = 'PUT';
@@ -120,9 +121,6 @@ export default {
 				console.log(error);
 			}
 		},
-		updateLotteriesMethod() {
-			this.updatedLotteries = this.lotteries;
-		},
 	},
 	computed: {
 		totalLotteries() {
@@ -131,7 +129,6 @@ export default {
 	},
 	created() {
 		this.getLotteries();
-		console.log(this.lotteries);
 	},
 	watch: {
 		$route(to) {
@@ -167,8 +164,8 @@ export default {
 	box-sizing: border-box;
 	width: 80px;
 	height: 80px;
-	background: #3b4f72;
-	border: 1px solid rgb(0, 0, 0);
+	background: rgb(67, 15, 15);
+	border: 1px solid white;
 	border-radius: 17px;
 	text-align: center;
 	cursor: pointer;

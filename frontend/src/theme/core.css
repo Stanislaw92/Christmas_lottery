@@ -1,8 +1,21 @@
 ion-toolbar { 
-    --background: var(--ion-color-primary);
-    --color: var(--ion-color-primary-contrast)
+    --background: rgb(67, 15, 15);
+    --color: white;
 }
 
 ion-toolbar, ion-header {
     --min-height: 48px;
    }
+
+ion-content {
+    --background: url('https://img.freepik.com/free-vector/modern-merry-christmas-background-with-modern-design_1361-2015.jpg?w=2000')48% 30%;
+}
+
+ion-item {
+    --background: rgba(208, 194, 194, 0.415);
+}
+
+
+.bgTrans {
+	background: transparent;
+}

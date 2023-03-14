@@ -9,9 +9,10 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/LotteryDetails',
+    path: '/:uuid',
     name: 'lotteryDetails',
     component: LotteryDetail,
+    props: true
   }
 ]
 

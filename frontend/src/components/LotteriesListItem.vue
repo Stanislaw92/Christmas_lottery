@@ -16,7 +16,7 @@
 					></ion-icon>&nbsp;&nbsp;&nbsp;
 					<ion-icon
 						class="actionButtons"
-						@click ="alertConfirmation('are You sure You want delete this lottery?!', deleteLottery)"
+						@click ="alertConfirmation('Are You sure You want delete this lottery?!', deleteLottery)"
 						slot="icon-only"
 						:icon="trash"
 					></ion-icon>

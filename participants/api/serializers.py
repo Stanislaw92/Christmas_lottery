@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from participants.models import Participant, Lottery
+from participants.models import Participant, Lottery, LotteryResult
 
 
 class ParticipantSerializer(serializers.ModelSerializer):
@@ -19,6 +19,7 @@ class LotterySerializer(serializers.ModelSerializer):
     creator = serializers.StringRelatedField()
     created_at = serializers.SerializerMethodField()
     num_of_participants = serializers.SerializerMethodField()
+    have_result = serializers.SerializerMethodField()
 
     class Meta:
         model = Lottery
@@ -29,3 +30,15 @@ class LotterySerializer(serializers.ModelSerializer):
 
     def get_num_of_participants(self, instance):
         return instance.participant.count()
+
+    def get_have_result(self, instance):
+        return instance.get_result()
+
+
+class LotteryResultSerializer(serializers.ModelSerializer):
+    group = serializers.StringRelatedField()
+
+    class Meta:
+        model = LotteryResult
+        exclude = ["id"]
+

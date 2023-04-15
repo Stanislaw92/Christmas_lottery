@@ -1,95 +1,165 @@
 <template>
-	<base-layout page-title="Christmas Lottery">
-		<lotteries-list
-			:lotteries="lotteries"
-			:totalLotteries="totalLotteries"
-			@deleteLottery="deleteLottery"
-			@editLottery="editLottery"
-		/>
-		<div class="lotteriesLoader">
-			<div v-if="loadingLotteries" id="wifi-loader">
-				<svg class="circle-outer" viewBox="0 0 86 86">
-					<circle class="back" cx="43" cy="43" r="40"></circle>
-					<circle class="front" cx="43" cy="43" r="40"></circle>
-					<circle class="new" cx="43" cy="43" r="40"></circle>
-				</svg>
-				<svg class="circle-middle" viewBox="0 0 60 60">
-					<circle class="back" cx="30" cy="30" r="27"></circle>
-					<circle class="front" cx="30" cy="30" r="27"></circle>
-				</svg>
-				<svg class="circle-inner" viewBox="0 0 34 34">
-					<circle class="back" cx="17" cy="17" r="14"></circle>
-					<circle class="front" cx="17" cy="17" r="14"></circle>
-				</svg>
-				<div class="text" data-text="Loading..."></div>
-			</div>
-		</div>
-		<div class="bottomLottery">
-			<div class="flexCenter">
-				<button class="card" id="open-modal">
-					<ion-icon
-						size="large"
-						slot="icon-only"
-						:icon="add"
-						color="light"
-					></ion-icon>
-				</button>
+	<base-layout
+		page-title="Christmas Lottery"
+		:infoBoxHeight="infoBoxHeight"
+		:contentBoxHeight ="contentBoxHeight"
+	>
+		
+		<template v-slot:actions-start1>
+			<ion-button>
+				<a href="/accounts/logout/">
+					<ion-icon style="font-size: 26px;" name="log-out-outline"></ion-icon>
+				</a>
+			</ion-button>
+		</template>
+
+		<template v-slot:actions-end>
+			<ion-button v-if="lotteries.length < 5" id="open-modal">
+				<ion-icon slot="icon-only" :icon="add"></ion-icon>
 				<create-lottery-modal 
-					@refreshLotteries="getLotteries">
+				:lotteriesLenght = "lotteries.length"
+				@refreshLotteries="getLotteries">
 				</create-lottery-modal>
+			</ion-button>
+		</template>
+
+		<template v-slot:actions-end1>
+			<ion-button
+				@click = "showInfo"
+				class="infoIconTrans"
+				:style="infoIconVisibility">
+				<i class="fa-solid fa-info" style="color: black;"></i>
+			</ion-button>
+		</template>
+
+
+
+		<template v-slot:info-slot>
+			<div class="infoContainer">
+				<div v-if="loadingLotteries" class="lotteriesLoader">
+					<div id="wifi-loader">
+						<svg class="circle-outer" viewBox="0 0 86 86">
+							<circle class="back" cx="43" cy="43" r="40"></circle>
+							<circle class="front" cx="43" cy="43" r="40"></circle>
+							<circle class="new" cx="43" cy="43" r="40"></circle>
+						</svg>
+						<svg class="circle-middle" viewBox="0 0 60 60">
+							<circle class="back" cx="30" cy="30" r="27"></circle>
+							<circle class="front" cx="30" cy="30" r="27"></circle>
+						</svg>
+						<svg class="circle-inner" viewBox="0 0 34 34">
+							<circle class="back" cx="17" cy="17" r="14"></circle>
+							<circle class="front" cx="17" cy="17" r="14"></circle>
+						</svg>
+						<div class="text" data-text="Loading..."></div>
+					</div>
+				</div>
+				<div v-else class="infoBody" :style="displayInfoVisible">
+					<div v-if="5 > totalLotteries > 0" class="textField">
+						Welcome!This is Your christmass lottery! To see your lottery details click on the image next to your lottery. Maximum number of lotteries is 5.
+					</div>
+					<div v-else-if="totalLotteries == 0" class="textField">
+						Welcome! This is Your christmass lottery! At first u need to create your first lottery, you can do so by pressing plus icon in the right top corner!
+					</div>
+					<div v-else-if="totalLotteries >= 5" class="textField">
+						5 is maximum number of lotteries, you need to delete some to add another one!
+					</div>
+					<div >
+						<ion-icon
+							@click="removeInfo"
+							slot="icon-only"
+							:icon="close"
+						></ion-icon>
+					</div>
+				</div>
+
 			</div>
-		</div>
+		</template>
+
+		<template v-slot:content-slot>
+			<lotteries-list
+				v-if="lotteries"
+				:lotteries="lotteries"
+				:totalLotteries="totalLotteries"
+				@deleteLottery="deleteLottery"
+				@editLottery="editLottery"
+			/>
+		</template>
 	</base-layout>
 </template>
 
 <script>
-// import { OverlayEventDetail } from '@ionic/core/components';
-import { add, close, checkmark } from 'ionicons/icons';
-import { axios } from '@/common/api.service.js';
+// import { useStore } from '../stores'
 import CreateLotteryModal from '../components/CreateLotteryModal.vue';
+import { add, close, checkmark, map, trash, create, logOutOutline } from 'ionicons/icons';
+import { axios } from '@/common/api.service.js';
 import LotteriesList from '../components/LotteriesList.vue';
-
-import {
-	// IonButton,
-	IonIcon,
-} from '@ionic/vue';
+import { IonButton, IonIcon } from '@ionic/vue';
 
 export default {
 	components: {
-		// IonButton,
+		IonButton,
 		IonIcon,
-		CreateLotteryModal,
 		LotteriesList,
+		CreateLotteryModal,
 	},
 	data() {
 		return {
 			lotteries: [],
-			next: null,
+			nextPage: null,
 			loadingLotteries: false,
 			error: null,
 			add,
 			close,
 			checkmark,
-			updatedLotteries: null,
-			test: {},
+			map,
+			trash,
+			logOutOutline,
+			create,
+			testVar: false,
+			infoBoxHeight: 35,
+			contentBoxHeight: 65,
+			displayInfoVisible: {visibility: "visible", opacity: '1'},
+			infoIconVisibility: {visibility: 'hidden', opacity: '0'}
 		};
 	},
 	methods: {
+		logoutFunc() {
+			console.log('logout')
+			this.$router.replace('/accounts/logout/')
+		},
+		changeHeightProp(x, y) {
+			this.infoBoxHeight = x
+			this.contentBoxHeight = y
+		},
+		removeInfo() {
+			this.displayInfoVisible = {visibility: "hidden", opacity: '0'};
+			this.changeHeightProp(15, 85)
+			this.infoIconVisibility = {visibility: "visible", opacity: '1', transition: "visibility 0.4s opacity 0.4s"}
+		},
+		showInfo() {
+			this.changeHeightProp(35, 65)
+			this.infoIconVisibility = {visibility: 'hidden', opacity: '0', transition: "visibility 2s opacity 2s"}
+			setTimeout(() => {
+				this.displayInfoVisible = {visibility: "visible", opacity: '1', transition: "visibility 0.4s opacity 0.4s"}
+			}, 100)
+		},
 		async getLotteries() {
 			this.lotteries = [];
 			let endpoint = '/api/v1/lotteries/';
-			if (this.next) {
-				endpoint = this.next;
+			if (this.nextPage) {
+				endpoint = this.nextPage;
 			}
 			this.loadingLotteries = true;
 			try {
 				const response = await axios.get(endpoint);
 				this.lotteries.push(...response.data.results);
+				console.log(this.lotteries)
 				this.loadingLotteries = false;
-				if (response.data.next) {
-					this.next = response.data.next;
+				if (response.data.nextPage) {
+					this.nextPage = response.data.next;
 				} else {
-					this.next = null;
+					this.nextPage = null;
 				}
 			} catch (error) {
 				console.log(error.response);
@@ -100,6 +170,7 @@ export default {
 			try {
 				await axios.delete(endpoint);
 				this.lotteries.splice(this.lotteries.indexOf(lotteryData), 1);
+				this.getLotteries();
 			} catch (error) {
 				console.log(error);
 			}
@@ -141,6 +212,55 @@ export default {
 </script>
 
 <style>
+
+
+.christmassImage {
+	width: 60px;
+	height: 60px;
+	margin-right: 20px;
+	border-radius: 10px;
+}
+
+.infoContainerDetails {
+	flex-direction: column;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 20px;
+}
+.infoIconTrans {
+	transition: visibility 0.5s opacity 0.5s;
+}
+
+.textField {
+	font-family: 'Delicious Handrawn', cursive;
+	overflow: scroll
+}
+.testContainer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.infoContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.infoBody {
+	border-radius: 20px;
+	padding: 20px;
+	width: 80%;
+	background-color: rgb(238, 237, 237);
+	color: black;
+	margin: 30px;
+	display: flex;
+	justify-content: space-between;
+	opacity: 1;
+	transition:visibility 0.3s linear,opacity 0.3s linear
+}
+
 .bottomLottery {
 	width: 80px;
 	padding: 20px 0px;
@@ -159,7 +279,7 @@ export default {
 	justify-content: center;
 }
 
-.card {
+.cardBtn {
 	position: relative;
 	box-sizing: border-box;
 	width: 80px;
@@ -175,12 +295,12 @@ export default {
 	font-weight: bolder;
 }
 
-.card:hover {
+.cardBtn:hover {
 	border: 1px solid black;
 	transform: scale(1.05);
 }
 
-.card:active {
+.cardBtn:active {
 	transform: scale(0.95) rotateZ(1.7deg);
 }
 

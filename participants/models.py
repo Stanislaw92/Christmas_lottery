@@ -7,6 +7,8 @@ from core.models import TimeStampedModel
 
 from users.models import CustomUser
 
+from jsonfield import JSONField
+
 class Lottery(TimeStampedModel):
     uuid = models.UUIDField(default=uuid_lib.uuid4, editable=False)
     name = models.CharField(max_length=50, default='')
@@ -17,6 +19,12 @@ class Lottery(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+    def get_result(self):
+        if hasattr(self, 'results'):
+            return True
+        else:
+            return False
 
 class Participant(models.Model):
     uuid = models.UUIDField(default=uuid_lib.uuid4, editable=False)
@@ -34,3 +42,12 @@ class Participant(models.Model):
 
     def __str__(self):
         return self.name + " " + self.surname
+
+
+class LotteryResult(models.Model):
+    group = models.OneToOneField(Lottery, on_delete=models.CASCADE, related_name='results')
+    result = JSONField()
+    uuid = models.UUIDField(default=uuid_lib.uuid4, editable=False)
+
+    def __str__(self):
+        return 'Result of lottery: {}'.format(self.group.name)

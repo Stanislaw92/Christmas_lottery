@@ -1,23 +1,54 @@
 ion-toolbar { 
-    --background: rgb(67, 15, 15);
-    --color: white;
+    --background: rgb(240, 240, 240);
+    --color: rgb(26, 25, 25);
+
 }
 
 ion-toolbar, ion-header {
-    --min-height: 48px;
+    /* --background: rgb(255, 255, 255);
+    --background: rgb(209,70,70); */
+    --background: linear-gradient(90deg, rgba(209,70,70,1) 0%, rgba(205,118,118,1) 100%);
+    --min-height: 7vh;
+
    }
 
+
+
 ion-content {
-    --background: url('https://img.freepik.com/free-vector/modern-merry-christmas-background-with-modern-design_1361-2015.jpg?w=2000')48% 30%;
+    --background: rgb(238, 237, 237);
+    /* --background: url('https://img.freepik.com/free-vector/modern-merry-christmas-background-with-modern-design_1361-2015.jpg?w=2000')48% 30%; */
 }
 
 ion-item {
-    --background: rgba(208, 194, 194, 0.415);
+    --background: rgb(255, 255, 255);
 }
 
+ion-title {
+    color: rgb(33, 32, 32);
+    font-family: 'Delicious Handrawn', cursive;
+    font-size: 25px;
+}
 
+ion-icon {
+    color: rgb(0, 0, 0);
+  }
+  
+/* .header-ios ion-toolbar:last-of-type {
+    --border-width: 10px;
+} */
 
+.sc-ion-alert-ios-h {
+    --background: rgb(202, 184, 184);
+}
+
+.alert-button.sc-ion-alert-ios  {
+    color: rgb(8, 0, 233);
+}
 
 .bgTrans {
 	background: transparent;
+}
+
+.header-md::after {
+    height: 0;
 }

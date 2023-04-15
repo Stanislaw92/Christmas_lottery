@@ -2,8 +2,8 @@
 {% load widget_tweaks %}
 
 {% block content %}
-<h1 class="text-light">Christmas lottery</h1>
-<p class="text-light mb-4">Login site</p>
+<h1 class="text-dark">Christmas lottery</h1>
+<p class="text-dark mb-4">Login site</p>
 <div class="form-container">
     <form method="POST">
         {% csrf_token %}
@@ -30,11 +30,11 @@
         {% endif %}
 
         <div class="d-grid gap-2">
-          <button type="submit" class="btn btn-lg btn-primary">Login</button>
+          <button type="submit" class="btn btn-lg btn-danger">Login</button>
         </div>
     </form>
 
-    <p class="text-light mt-4">
+    <p class="text-dark mt-4">
       Or <a href="{% url 'django_registration_register' %}" class="auth-link">Create an Account</a>
     </p> 
 </div>

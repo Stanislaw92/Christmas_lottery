@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 
 {% block content %}
-<h3 class="text-light mt-3 mb-4">Create Your Christmas Lottery Account!</h3>
+<h3 class="text-dark mt-3 mb-4">Create Your Christmas Lottery Account!</h3>
 <div class="form-container">
   <form method="POST">
     {% csrf_token %}
@@ -67,11 +67,11 @@
     {% endif %}
 
     <div class="d-grid gap-2">
-      <button type="submit" class="btn btn-lg btn-primary">Create Account</button>
+      <button type="submit" class="btn btn-lg btn-danger">Create Account</button>
     </div>
   </form>
-  <p class="text-light mt-4">
-    Or <a href="{% url 'login' %}" class="auth-link">Login</a>
+  <p class="text-dark mt-4">
+    Or <a href="/accounts/login/?next=/" class="auth-link">Login</a>
   </p>
 </div>
 {% endblock %}
